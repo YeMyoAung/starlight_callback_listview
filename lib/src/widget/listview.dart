@@ -1,8 +1,8 @@
 part of starlight_callback_listview;
 
 class StarlightCallbackListView extends StatefulWidget {
-  final int count;
-  final IndexedWidgetBuilder builder;
+  final int? count;
+  final IndexedWidgetBuilder? builder;
   final void Function(double percent)? invokeWhen;
   final Axis scrollDirection;
   final bool reverse;
@@ -23,7 +23,38 @@ class StarlightCallbackListView extends StatefulWidget {
   final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
   final String? restorationId;
   final Clip clipBehavior;
+  final List<Widget> children;
+  final bool _usingBuilder;
+
   const StarlightCallbackListView({
+    Key? key,
+    this.invokeWhen,
+    this.scrollDirection = Axis.vertical,
+    this.reverse = false,
+    this.controller,
+    this.primary,
+    this.physics,
+    this.shrinkWrap = false,
+    this.padding,
+    this.itemExtent,
+    this.prototypeItem,
+    this.findChildIndexCallback,
+    this.addAutomaticKeepAlives = true,
+    this.addRepaintBoundaries = true,
+    this.addSemanticIndexes = true,
+    this.cacheExtent,
+    this.semanticChildCount,
+    this.dragStartBehavior = DragStartBehavior.start,
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
+    this.restorationId,
+    this.clipBehavior = Clip.hardEdge,
+    required this.children,
+  })  : count = null,
+        builder = null,
+        _usingBuilder = false,
+        super(key: key);
+
+  const StarlightCallbackListView.builder({
     Key? key,
     required this.count,
     required this.builder,
@@ -47,7 +78,9 @@ class StarlightCallbackListView extends StatefulWidget {
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
     this.restorationId,
     this.clipBehavior = Clip.hardEdge,
-  }) : super(key: key);
+  })  : _usingBuilder = true,
+        children = const [],
+        super(key: key);
 
   @override
   State<StarlightCallbackListView> createState() =>
@@ -58,17 +91,56 @@ class _StarlightCallbackListViewState extends State<StarlightCallbackListView> {
   late ScrollController _controller;
 
   @override
-  void initState() {
-    super.initState();
-    _controller = widget.controller ?? ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (widget.invokeWhen != null) _controller.addListener(_listener);
-    });
-  }
-
-  void _listener() {
-    widget.invokeWhen!.call(
-      _controller.percent(),
+  Widget build(BuildContext context) {
+    return NotificationListener(
+      onNotification: _remove,
+      child: widget._usingBuilder
+          ? ListView.builder(
+              key: widget.key,
+              scrollDirection: widget.scrollDirection,
+              reverse: widget.reverse,
+              controller: _controller,
+              primary: widget.primary,
+              physics: widget.physics,
+              shrinkWrap: widget.shrinkWrap,
+              padding: widget.padding,
+              itemExtent: widget.itemExtent,
+              prototypeItem: widget.prototypeItem,
+              itemBuilder: widget.builder!,
+              findChildIndexCallback: widget.findChildIndexCallback,
+              itemCount: widget.count,
+              addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
+              addRepaintBoundaries: widget.addRepaintBoundaries,
+              addSemanticIndexes: widget.addSemanticIndexes,
+              dragStartBehavior: widget.dragStartBehavior,
+              keyboardDismissBehavior: widget.keyboardDismissBehavior,
+              restorationId: widget.restorationId,
+              clipBehavior: widget.clipBehavior,
+              cacheExtent: widget.cacheExtent,
+              semanticChildCount: widget.semanticChildCount,
+            )
+          : ListView(
+              key: widget.key,
+              cacheExtent: widget.cacheExtent,
+              scrollDirection: widget.scrollDirection,
+              reverse: widget.reverse,
+              controller: _controller,
+              primary: widget.primary,
+              physics: widget.physics,
+              shrinkWrap: widget.shrinkWrap,
+              padding: widget.padding,
+              itemExtent: widget.itemExtent,
+              prototypeItem: widget.prototypeItem,
+              semanticChildCount: widget.semanticChildCount,
+              addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
+              addRepaintBoundaries: widget.addRepaintBoundaries,
+              addSemanticIndexes: widget.addSemanticIndexes,
+              dragStartBehavior: widget.dragStartBehavior,
+              keyboardDismissBehavior: widget.keyboardDismissBehavior,
+              restorationId: widget.restorationId,
+              clipBehavior: widget.clipBehavior,
+              children: widget.children,
+            ),
     );
   }
 
@@ -82,31 +154,17 @@ class _StarlightCallbackListViewState extends State<StarlightCallbackListView> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return NotificationListener(
-      onNotification: _remove,
-      child: ListView.builder(
-        key: widget.key,
-        scrollDirection: widget.scrollDirection,
-        reverse: widget.reverse,
-        controller: _controller,
-        primary: widget.primary,
-        physics: widget.physics,
-        shrinkWrap: widget.shrinkWrap,
-        padding: widget.padding,
-        itemExtent: widget.itemExtent,
-        prototypeItem: widget.prototypeItem,
-        itemBuilder: widget.builder,
-        findChildIndexCallback: widget.findChildIndexCallback,
-        itemCount: widget.count,
-        addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
-        addRepaintBoundaries: widget.addRepaintBoundaries,
-        addSemanticIndexes: widget.addSemanticIndexes,
-        dragStartBehavior: widget.dragStartBehavior,
-        keyboardDismissBehavior: widget.keyboardDismissBehavior,
-        restorationId: widget.restorationId,
-        clipBehavior: widget.clipBehavior,
-      ),
+  void initState() {
+    super.initState();
+    _controller = widget.controller ?? ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.invokeWhen != null) _controller.addListener(_listener);
+    });
+  }
+
+  void _listener() {
+    widget.invokeWhen!.call(
+      _controller.percent(),
     );
   }
 }
