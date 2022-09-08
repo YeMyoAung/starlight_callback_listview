@@ -2,6 +2,13 @@
 
 starlight_callback_listview, widget contains a scroll listener and you can do everything that you want to do using that listener.
 
+## Features
+
+| Name                            | Status |
+| ------------------------------- | ------ |
+| All Of Listview Feature | ✅     |
+| All Of GridView Feature             | ✅     |
+
 ## Installation
 
 Add starlight_callback_listview as dependency to your pubspec file.
@@ -25,6 +32,9 @@ import 'package:starlight_callback_listview/starlight_callback_listview.dart';
 ```
 
 And then you can use easily.
+
+## invokeWhen
+``` invokeWhen ``` method will give you a percent of the current scroll location. You can easily check out that & do something else.
 
 ## Example
 
