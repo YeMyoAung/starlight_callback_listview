@@ -235,13 +235,13 @@ class _StarlightCallbackGridViewState extends State<StarlightCallbackGridView> {
           addRepaintBoundaries: widget.addRepaintBoundaries,
           addSemanticIndexes: widget.addSemanticIndexes,
           cacheExtent: widget.cacheExtent,
-          children: widget._children,
           semanticChildCount: widget.semanticChildCount,
           dragStartBehavior: widget.dragStartBehavior,
           keyboardDismissBehavior: widget.keyboardDismissBehavior,
           restorationId: widget.restorationId,
           clipBehavior: widget.clipBehavior,
           key: widget.key,
+          children: widget._children,
         );
         break;
       case _Using.extent:
@@ -262,12 +262,12 @@ class _StarlightCallbackGridViewState extends State<StarlightCallbackGridView> {
           addRepaintBoundaries: widget.addRepaintBoundaries,
           addSemanticIndexes: widget.addSemanticIndexes,
           cacheExtent: widget.cacheExtent,
-          children: widget._children,
           semanticChildCount: widget.semanticChildCount,
           dragStartBehavior: widget.dragStartBehavior,
           keyboardDismissBehavior: widget.keyboardDismissBehavior,
           restorationId: widget.restorationId,
           clipBehavior: widget.clipBehavior,
+          children: widget._children,
         );
         break;
       case _Using.custom:
